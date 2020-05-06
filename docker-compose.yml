@@ -24,24 +24,4 @@ services:
     depends_on:
       - api
 
-  # POZOS private registry that stores images
-  registry-svc:
-    container_name: registry-ctn
-    image: registry
-    ports:
-      - 5000:5000
-    depends_on:
-      - website-svc
-
-  # Dashboard for private registry that helps manage images
-  registry-front-svc:
-    image: joxit/docker-registry-ui:static
-    ports:
-      - 8080:80
-    environment:
-      - REGISTRY_TITLE=POZOS Private Docker Registry
-      - REGISTRY_URL=http://registry-ctn:5000
-    depends_on:
-      - registry-svc
-
 
