@@ -17,8 +17,8 @@ services:
     volumes:
       - ./website:/var/www/html
     environment:
-      USERNAME=toto
-      PASSWORD=python
+      - USERNAME=toto
+      - PASSWORD=python
     ports:
       - 80:80
     depends_on:
