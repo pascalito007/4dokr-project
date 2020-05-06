@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+  # Studentlist api service
+  api:
+    container_name: api
+    image: api:latest
+    volumes:
+      - ./simple_api/student_age.json:/data/student_age.json
+    ports:
+      - 5001:5000
+
+  #Front-end PHP app that shows list of students
+  website:
+    image: php:apache
+    container_name: app
+    volumes:
+      - ./website:/var/www/html
+    environment:
+      USERNAME=toto
+      PASSWORD=python
+    ports:
+      - 80:80
+    depends_on:
+      - api
+
+  # POZOS private registry that stores images
+  registry-svc:
+    container_name: registry-ctn
+    image: registry
+    ports:
+      - 5000:5000
+    depends_on:
+      - website-svc
+
+  # Dashboard for private registry that helps manage images
+  registry-front-svc:
+    image: joxit/docker-registry-ui:static
+    ports:
+      - 8080:80
+    environment:
+      - REGISTRY_TITLE=POZOS Private Docker Registry
+      - REGISTRY_URL=http://registry-ctn:5000
+    depends_on:
+      - registry-svc
+
+
